@@ -10,12 +10,12 @@ from textgenrnn import textgenrnn
 """I should definitely make this into a class...."""
 
 
-class Writrz-Blk(object):
+class Writrz_Blk(object):
     def __init__(self):
-        self.root = root = Tk()
-        root.title("Writrz-Blk")
+        self.root = Tk()
+        self.root.title("Writrz-Blk")
 
-        build_menu()
+        
 
         self.text = Text(self.root, height=30, width=60, font = ("Arial", 10))
         self.text_suggestion = Text(self.root, height=30, width=30, font = ("Arial", 10))
@@ -30,16 +30,18 @@ class Writrz-Blk(object):
 
         self.text.focus_set()
         self.text.grid(row=1,column=0)
-        self.text.bind('<Command-KeyRelease-a>', self.select_all)
+        
 
+        self.build_menu()
         self.root.resizable(0,0)
         self.root.mainloop()
 
-    def build_menu():
+    def build_menu(self):
         menu = Menu(self.root)
         filemenu = Menu(self.root)
-        root.config(menu = menu)
+        self.root.config(menu = menu)
         menu.add_cascade(label="File", menu=filemenu)
+        self.text.bind('<Command-KeyRelease-a>', self.select_all)
 
         # Add command to file menu
         filemenu.add_command(label="Open", command=self.opn)
@@ -61,93 +63,95 @@ class Writrz-Blk(object):
 
         menu.add_cascade(label="Insert",menu= insmenu)
         insmenu.add_command(label="Date",command=self.date)
-        insmenu.add_command(label="Line",command=line)
-        insmenu.add_command(label = "Generate Text", command = gen)
+        insmenu.add_command(label="Line",command=self.line)
+        insmenu.add_command(label = "Generate Text", command = self.gen)
 
-        formatmenu = Menu(self.menu)
+        formatmenu = Menu(menu)
 
         menu.add_cascade(label="Format",menu = formatmenu)
-        formatmenu.add_cascade(label="Font Color", command = font)
+        formatmenu.add_cascade(label="Font Color", command = self.font)
         formatmenu.add_separator()
-        formatmenu.add_radiobutton(label='Normal',command=normal)
-        formatmenu.add_radiobutton(label='Bold',command=bold)
-        formatmenu.add_radiobutton(label='Underline',command=underline)
-        formatmenu.add_radiobutton(label='Italic',command=italic)
+        formatmenu.add_radiobutton(label='Normal',command=self.normal)
+        formatmenu.add_radiobutton(label='Bold',command=self.bold)
+        formatmenu.add_radiobutton(label='Underline',command=self.underline)
+        formatmenu.add_radiobutton(label='Italic',command=self.italic)
 
-    def line():
+    def line(self):
         lin = "_" * 60
-        text.insert(INSERT,lin)
+        self.text.insert(INSERT,lin)
 
-    def gen():
+    def gen(self):
         textgen = textgenrnn()
         a = textgen.generate(return_as_list=True)
-        text.insert(INSERT,"".join(a))
+        self.text.insert(INSERT,"".join(a))
 
-    def date():
+    def date(self):
         data = datetime.date.today()
-        text.insert(INSERT,data)
+        self.text.insert(INSERT,data)
 
-    def normal():
-        text.config(font = ("Arial", 10))
+    def normal(self):
+        self.text.config(font = ("Arial", 10))
 
-    def bold():
-        text.config(font = ("Arial", 10, "bold"))
+    def bold(self):
+        self.text.config(font = ("Arial", 10, "bold"))
 
-    def underline():
-        text.config(font = ("Arial", 10, "underline"))
+    def underline(self):
+        self.text.config(font = ("Arial", 10, "underline"))
 
-    def italic():
-        text.config(font = ("Arial",10,"italic"))
+    def italic(self):
+        self.text.config(font = ("Arial",10,"italic"))
 
-    def font():
+    def font(self):
         (triple,color) = askcolor()
         if color:
-           text.config(foreground=color)
+           self.text.config(foreground=color)
 
-    def kill():
-        root.destroy()
+    def kill(self):
+        self.root.destroy()
 
-    def select_all(event):
-        text.tag_add(SEL, "1.0", END)
-        text.mark_set(INSERT, END)
+    def select_all(self,event):
+        self.text.tag_add(SEL, "1.0", END)
+        self.text.mark_set(INSERT, END)
 
 
-    def opn():
-        text.delete(1.0 , END)
+    def opn(self):
+        self.text.delete(1.0 , END)
         file = open(askopenfilename() , 'r')
         if file != '':
             txt = file.read()
-            text.insert(INSERT,txt)
+            self.text.insert(INSERT,txt)
         else:
             pass    
 
-    def save():
+    def save(self):
         filename = asksaveasfilename()
         if filename:
-            alltext = text.get(1.0, END)                      
+            alltext = self.text.get(1.0, END)                      
             open(filename, 'w').write(alltext) 
 
-    def copy():
-        text.clipboard_clear()
-        text.clipboard_append(text.selection_get()) 
+    def copy(self):
+        self.text.clipboard_clear()
+        self.text.clipboard_append(text.selection_get()) 
 
 
-    def paste():
+    def paste(self):
         try:
-            teext = text.selection_get(selection='CLIPBOARD')
-            text.insert(INSERT, teext)
+            teext = self.text.selection_get(selection='CLIPBOARD')
+            self.text.insert(INSERT, teext)
         except:
             tkMessageBox.showerror("Error","Could not paste")
 
-    def clear():
-        sel = text.get(SEL_FIRST, SEL_LAST)
-        text.delete(SEL_FIRST, SEL_LAST)
+    def clear(self):
+        sel = self.text.get(SEL_FIRST, SEL_LAST)
+        self.text.delete(SEL_FIRST, SEL_LAST)
 
-    def clearall():
-        text.delete(1.0 , END)
+    def clearall(self):
+        self.text.delete(1.0 , END)
 
     def background():
         (triple,color) = askcolor()
         if color:
-           text.config(background=color)
+           self.text.config(background=color)
 
+if __name__ == "__main__":
+    w = Writrz_Blk()
