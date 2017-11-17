@@ -92,7 +92,7 @@ def background():
     
 
 root = Tk()
-root.title("Re-Writer")
+root.title("Writrz-Blk")
 
 
 menu = Menu(root)
@@ -155,14 +155,22 @@ formatmenu.add_radiobutton(label='Italic',command=italic)
 
 
 text = Text(root, height=30, width=60, font = ("Arial", 10))
+text_suggestion = Text(root, height=30, width=30, font = ("Arial", 10))
 
+generate_text = Button(root, text="Generate Text", command=gen)
+generate_text.grid(row=0, column=0)
 
-scroll = Scrollbar(root, command=text.yview)
-scroll.config(command=text.yview)                  
-text.config(yscrollcommand=scroll.set)           
-scroll.pack(side=RIGHT, fill=Y)
+w = Label(root, text="Suggested Text", anchor=E, justify=LEFT)
+w.grid(row=0, column=1)
+# scroll = Scrollbar(root, command=text.yview)
+# scroll.config(command=text.yview)                  
+# text.config(yscrollcommand=scroll.set)           
+# scroll.grid(row=0, column=1)
+
+text_suggestion.grid(row=1,column=1)
+
 text.focus_set()
-text.pack()
+text.grid(row=1,column=0)
 text.bind('<Command-KeyRelease-a>', select_all)
 
 
