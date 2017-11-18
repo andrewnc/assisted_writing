@@ -49,12 +49,18 @@ class Writrz_Blk(object):
 
     def gen(self):
         textgen = textgenrnn()
-        a = textgen.generate(return_as_list=True)[0].split()
+        current_text = self.text.get("1.0", END)
+        n = len(current_text)
+        current_text = current_text.strip().split()
+        if n > 1:
+            a = textgen.generate(prefix = current_text[:-1], return_as_list=True)[0].split()
+        else:
+            a = textgen.generate(return_as_list=True)[0].split()
 
         #get several different suggestions
-        b = a[0]
-        c = a[0:4]
-        d = a[5:10]
+        b = a[1]
+        c = a[1:4]
+        d = a[1:10]
         self.suggestion.insert(END,"".join(b).lower())
         self.suggestion.insert(END," ".join(c).lower())
         self.suggestion.insert(END," ".join(d).lower())
